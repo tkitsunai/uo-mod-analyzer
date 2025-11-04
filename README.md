@@ -1,73 +1,102 @@
-# React + TypeScript + Vite
+# UO Mod Analyzer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+UO Mod Analyzer は、画像からテキストを抽出して MOD の情報を解析する Web アプリケーションです。OCR（光学文字認識）技術を使用して、ゲーム内のアイテムや MOD の詳細を読み取り、分析します。
 
-Currently, two official plugins are available:
+## 🌐 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[**UO Mod Analyzer**](https://tkitsunai.github.io/uo-mod-analyzer/) - GitHub Pages で公開中
 
-## React Compiler
+## ✨ 特徴
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- 📸 **画像アップロード**: ゲーム内のスクリーンショットをアップロード
+- 🔍 **OCR 解析**: Tesseract.js を使用した高精度なテキスト認識
+- 📊 **MOD 情報抽出**: アイテムの詳細や MOD 情報を自動解析
+- 🎨 **レスポンシブデザイン**: モバイルとデスクトップの両方に対応
+- ⚡ **高速処理**: React による効率的な UI 更新
 
-## Expanding the ESLint configuration
+## 🛠️ 技術スタック
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend**: React 19 + TypeScript
+- **Build Tool**: Vite
+- **OCR Engine**: Tesseract.js
+- **Styling**: CSS3
+- **Deployment**: GitHub Pages
+- **CI/CD**: GitHub Actions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 開発環境のセットアップ
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 前提条件
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js (v18 以上)
+- pnpm
+
+### インストール
+
+```bash
+# リポジトリをクローン
+git clone https://github.com/tkitsunai/uo-mod-analyzer.git
+cd uo-mod-analyzer
+
+# 依存関係をインストール
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 開発サーバーの起動
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm dev
 ```
+
+開発サーバーが `http://localhost:5173` で起動します。
+
+### ビルド
+
+```bash
+pnpm build
+```
+
+### プレビュー
+
+```bash
+pnpm preview
+```
+
+## 📁 プロジェクト構造
+
+```
+uo-mod-analyzer/
+├── public/           # 静的ファイル
+├── src/              # ソースコード
+│   ├── App.tsx       # メインアプリケーション
+│   ├── main.tsx      # エントリーポイント
+│   └── assets/       # 画像・アイコン等
+├── .github/          # GitHub Actions ワークフロー
+└── dist/             # ビルド出力（自動生成）
+```
+
+## 🔧 使用方法
+
+1. アプリケーションにアクセス
+2. 「画像を選択」ボタンをクリックして、MOD 情報が表示された画像をアップロード
+3. OCR 処理が自動的に実行され、テキストが抽出されます
+4. 抽出されたテキストから MOD 情報を確認
+
+## 🤝 コントリビューション
+
+プルリクエストや Issue の投稿を歓迎します！
+
+1. このリポジトリをフォーク
+2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
+3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
+4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
+5. プルリクエストを作成
+
+## 📝 ライセンス
+
+このプロジェクトは MIT ライセンスの下で公開されています。
+
+## 🔗 関連リンク
+
+- [Tesseract.js](https://tesseract.projectnaptha.com/) - OCR ライブラリ
+- [React](https://react.dev/) - UI ライブラリ
+- [Vite](https://vite.dev/) - ビルドツール
