@@ -1,15 +1,19 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import type { ModEntry } from "../domain/entities/ModEntry";
 import { ImageProcessor } from "../usecases/ImageProcessor";
 import { TesseractOcrService } from "../infrastructure/ocr/TesseractOcrService";
+import { ItemNameEstimationUseCase } from "../usecases/ItemNameEstimationUseCase";
+import type { ItemNameEstimation } from "../domain/services/RefactoredItemNameEstimator";
 
 export const useOcrProcessing = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [ocrText, setOcrText] = useState<string>("");
   const [modEntries, setModEntries] = useState<ModEntry[]>([]);
+  const [estimatedName, setEstimatedName] = useState<ItemNameEstimation | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const imageProcessor = new ImageProcessor(new TesseractOcrService());
+  const imageProcessor = useMemo(() => new ImageProcessor(new TesseractOcrService()), []);
+  const nameEstimationUseCase = useMemo(() => new ItemNameEstimationUseCase(), []);
 
   const processImage = useCallback(
     async (file: File) => {
@@ -25,6 +29,13 @@ export const useOcrProcessing = () => {
 
         setOcrText(result.ocrText);
         setModEntries(result.modEntries);
+
+        // アイテム名を推定
+        const nameEstimation = await nameEstimationUseCase.estimateItemName({
+          ocrText: result.ocrText,
+          modEntries: result.modEntries,
+        });
+        setEstimatedName(nameEstimation);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "画像の解析に失敗しました";
         setError(errorMessage);
@@ -39,6 +50,7 @@ export const useOcrProcessing = () => {
   const resetOcrResults = useCallback(() => {
     setOcrText("");
     setModEntries([]);
+    setEstimatedName(null);
     setError(null);
   }, []);
 
@@ -46,6 +58,7 @@ export const useOcrProcessing = () => {
     isProcessing,
     ocrText,
     modEntries,
+    estimatedName,
     error,
     processImage,
     resetOcrResults,

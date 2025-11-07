@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { FileHandler } from "../usecases/FileHandler";
+import { useState, useCallback, useMemo } from "react";
+import { FileHandler } from "../domain/services/FileHandler";
 import { FileService } from "../infrastructure/storage/FileService";
 
 export const useImageUpload = () => {
@@ -7,30 +7,42 @@ export const useImageUpload = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const fileHandler = new FileHandler(new FileService());
+  const fileHandler = useMemo(() => new FileHandler(new FileService()), []);
 
   const handleFileSelect = useCallback(
     async (file: File) => {
       setError(null);
 
       if (!fileHandler.isImageFile(file)) {
-        setError("画像ファイルを選択してください");
+        const errorMsg = "画像ファイルを選択してください";
+        console.error("❌ File validation failed - not an image:", file.type);
+        setError(errorMsg);
         return;
       }
 
       if (!fileHandler.isValidFileSize(file)) {
-        setError("ファイルサイズが大きすぎます（10MB以下にしてください）");
+        const errorMsg = "ファイルサイズが大きすぎます（10MB以下にしてください）";
+        console.error(
+          "❌ File validation failed - too large:",
+          `${Math.round(file.size / 1024 / 1024)}MB`
+        );
+        setError(errorMsg);
         return;
       }
 
       try {
         const preview = await fileHandler.createImagePreview(file);
-
         setSelectedFile(file);
         setImagePreview(preview);
+        console.log(
+          "✅ File selection successful:",
+          file.name,
+          `${Math.round(file.size / 1024)}KB`
+        );
       } catch (err) {
-        setError("画像プレビューの生成に失敗しました");
-        console.error(err);
+        const errorMsg = "画像プレビューの生成に失敗しました";
+        setError(errorMsg);
+        console.error("❌ Preview generation failed:", err);
       }
     },
     [fileHandler]

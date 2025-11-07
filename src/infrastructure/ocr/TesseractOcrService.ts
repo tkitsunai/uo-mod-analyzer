@@ -14,8 +14,9 @@ export class TesseractOcrService implements IOcrService {
     try {
       const result = await Tesseract.recognize(file, "eng", {
         logger: (info) => {
-          if (info.status === "recognizing text") {
-            console.log(`OCR進捗: ${Math.round(info.progress * 100)}%`);
+          if (info.status === "recognizing text" && info.progress % 0.2 === 0) {
+            // 20%刻みでログ出力を減らす
+            console.log(`🔍 OCR進捗: ${Math.round(info.progress * 100)}%`);
           }
         },
       });
@@ -25,7 +26,7 @@ export class TesseractOcrService implements IOcrService {
         confidence: result.data.confidence,
       };
     } catch (error) {
-      console.error("OCR処理エラー:", error);
+      console.error("❌ OCR processing error:", error);
       throw new Error("画像の解析に失敗しました。");
     }
   }

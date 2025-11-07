@@ -1,6 +1,5 @@
 import React from "react";
 import type { ModEntry } from "../../../domain/entities/ModEntry";
-import { Button } from "../../common/Button";
 
 interface ModTableProps {
   modEntries: ModEntry[];
@@ -33,9 +32,9 @@ export const ModTable: React.FC<ModTableProps> = ({ modEntries, onExportCSV, cla
         </tbody>
       </table>
 
-      <Button onClick={onExportCSV} variant="secondary">
-        CSVをダウンロード
-      </Button>
+      <button className="btn btn-secondary" onClick={onExportCSV}>
+        📊 CSV Export
+      </button>
     </div>
   );
 };
