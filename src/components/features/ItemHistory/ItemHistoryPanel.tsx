@@ -4,7 +4,6 @@ import { ItemCard } from "./ItemCard";
 import { HistoryPanelHeader } from "./HistoryPanelHeader";
 import { useHistoryFilters } from "../../../hooks/useHistoryFilters";
 import { CsvExportUseCase } from "../../../usecases/CsvExportUseCase";
-import { defaultCsvExportOptions } from "../../../domain/entities/CsvExportOptions";
 import { CsvExportDialog } from "../Export/CsvExportDialog";
 import type { CsvExportOptions } from "../../../domain/entities/CsvExportOptions";
 
