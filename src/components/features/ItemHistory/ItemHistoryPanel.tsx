@@ -5,6 +5,8 @@ import { HistoryPanelHeader } from "./HistoryPanelHeader";
 import { useHistoryFilters } from "../../../hooks/useHistoryFilters";
 import { CsvExportUseCase } from "../../../usecases/CsvExportUseCase";
 import { defaultCsvExportOptions } from "../../../domain/entities/CsvExportOptions";
+import { CsvExportDialog } from "../Export/CsvExportDialog";
+import type { CsvExportOptions } from "../../../domain/entities/CsvExportOptions";
 
 interface ItemHistoryPanelProps {
   items: AnalyzedItem[];
@@ -28,6 +30,7 @@ export const ItemHistoryPanel: React.FC<ItemHistoryPanelProps> = ({
   className = "",
 }) => {
   const [previewItem, setPreviewItem] = useState<AnalyzedItem | null>(null);
+  const [showCsvDialog, setShowCsvDialog] = useState(false);
 
   const { filteredItems, statistics, handleSearch, handleSort } = useHistoryFilters({ items });
 
@@ -41,16 +44,30 @@ export const ItemHistoryPanel: React.FC<ItemHistoryPanelProps> = ({
     setPreviewItem(null);
   };
 
-  const handleExportCSV = async () => {
-    if (filteredItems.length === 0) return;
-    await csvExportUseCase.exportToFile(filteredItems, defaultCsvExportOptions);
+  const handleShowCsvDialog = () => {
+    setShowCsvDialog(true);
   };
 
-  const handleCopyCSV = async () => {
+  const handleCloseCsvDialog = () => {
+    setShowCsvDialog(false);
+  };
+
+  const handleExportCSV = async (options: CsvExportOptions) => {
     if (filteredItems.length === 0) return;
     try {
-      await csvExportUseCase.copyToClipboard(filteredItems, defaultCsvExportOptions);
+      await csvExportUseCase.exportToFile(filteredItems, options);
+      setShowCsvDialog(false);
+    } catch (error) {
+      onShowMessage?.("❌ CSVエクスポートに失敗しました", "error", 3000);
+    }
+  };
+
+  const handleCopyCSV = async (options: CsvExportOptions) => {
+    if (filteredItems.length === 0) return;
+    try {
+      await csvExportUseCase.copyToClipboard(filteredItems, options);
       onShowMessage?.("📋 履歴データをクリップボードにコピーしました", "success", 3000);
+      setShowCsvDialog(false);
     } catch (error) {
       onShowMessage?.("❌ クリップボードへのコピーに失敗しました", "error", 3000);
     }
@@ -64,8 +81,7 @@ export const ItemHistoryPanel: React.FC<ItemHistoryPanelProps> = ({
           onSearch={() => {}}
           onSort={() => {}}
           onClearAll={onClearAll}
-          onExportCSV={handleExportCSV}
-          onCopyCSV={handleCopyCSV}
+          onExportCSV={handleShowCsvDialog}
         />
         <div className="loading-state">
           <p>履歴を読み込み中...</p>
@@ -82,8 +98,7 @@ export const ItemHistoryPanel: React.FC<ItemHistoryPanelProps> = ({
           onSearch={() => {}}
           onSort={() => {}}
           onClearAll={onClearAll}
-          onExportCSV={handleExportCSV}
-          onCopyCSV={handleCopyCSV}
+          onExportCSV={handleShowCsvDialog}
         />
         <div className="error-state" style={{ color: "red", padding: "16px" }}>
           <p>{error}</p>
@@ -99,8 +114,7 @@ export const ItemHistoryPanel: React.FC<ItemHistoryPanelProps> = ({
         onSearch={handleSearch}
         onSort={handleSort}
         onClearAll={onClearAll}
-        onExportCSV={handleExportCSV}
-        onCopyCSV={handleCopyCSV}
+        onExportCSV={handleShowCsvDialog}
       />
 
       <div className="panel-content">
@@ -155,6 +169,14 @@ export const ItemHistoryPanel: React.FC<ItemHistoryPanelProps> = ({
           </div>
         </div>
       )}
+
+      <CsvExportDialog
+        isOpen={showCsvDialog}
+        onClose={handleCloseCsvDialog}
+        onExport={handleExportCSV}
+        onCopy={handleCopyCSV}
+        itemCount={filteredItems.length}
+      />
     </div>
   );
 };

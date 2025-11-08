@@ -1,13 +1,18 @@
 import { useCallback, useMemo } from "react";
 import type { ModEntry } from "../domain/entities/ModEntry";
 import { CsvExportUseCase } from "../usecases/CsvExportUseCase";
+import type { CsvExportOptions } from "../domain/entities/CsvExportOptions";
 import { defaultCsvExportOptions } from "../domain/entities/CsvExportOptions";
 
 export const useCsvExport = () => {
   const csvExportUseCase = useMemo(() => new CsvExportUseCase(), []);
 
   const exportModEntries = useCallback(
-    async (modEntries: ModEntry[]) => {
+    async (
+      modEntries: ModEntry[],
+      itemName?: string,
+      options: CsvExportOptions = defaultCsvExportOptions
+    ) => {
       if (modEntries.length === 0) {
         console.warn("エクスポートするMODエントリがありません");
         return;
@@ -16,7 +21,7 @@ export const useCsvExport = () => {
       // ModEntry を AnalyzedItem 形式に変換
       const mockAnalyzedItem = {
         id: "temp",
-        name: "Current Item",
+        name: itemName || "Current Item",
         analyzedAt: new Date(),
         modEntries,
         ocrText: "",
@@ -24,10 +29,7 @@ export const useCsvExport = () => {
       };
 
       try {
-        await csvExportUseCase.exportToFile([mockAnalyzedItem], {
-          ...defaultCsvExportOptions,
-          includeHeaders: true,
-        });
+        await csvExportUseCase.exportToFile([mockAnalyzedItem], options);
       } catch (error) {
         console.error("CSV エクスポートに失敗しました:", error);
         throw new Error("CSV エクスポートに失敗しました");
@@ -67,7 +69,11 @@ export const useCsvExport = () => {
   );
 
   const copyModEntries = useCallback(
-    async (modEntries: ModEntry[]) => {
+    async (
+      modEntries: ModEntry[],
+      itemName?: string,
+      options: CsvExportOptions = defaultCsvExportOptions
+    ) => {
       if (modEntries.length === 0) {
         console.warn("コピーするMODエントリがありません");
         return;
@@ -76,7 +82,7 @@ export const useCsvExport = () => {
       // ModEntry を AnalyzedItem 形式に変換
       const mockAnalyzedItem = {
         id: "temp",
-        name: "Current Item",
+        name: itemName || "Current Item",
         analyzedAt: new Date(),
         modEntries,
         ocrText: "",
@@ -84,10 +90,7 @@ export const useCsvExport = () => {
       };
 
       try {
-        await csvExportUseCase.copyToClipboard([mockAnalyzedItem], {
-          ...defaultCsvExportOptions,
-          includeHeaders: true,
-        });
+        await csvExportUseCase.copyToClipboard([mockAnalyzedItem], options);
       } catch (error) {
         console.error("CSV クリップボードコピーに失敗しました:", error);
         throw new Error("CSV クリップボードコピーに失敗しました");

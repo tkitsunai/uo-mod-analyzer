@@ -1,12 +1,14 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import type { ModEntry } from "../../../domain/entities/ModEntry";
 import { isValidModEntry } from "../../../domain/entities/ModEntry";
+import { CsvExportDialog } from "../Export/CsvExportDialog";
+import type { CsvExportOptions } from "../../../domain/entities/CsvExportOptions";
 
 interface EditableModTableProps {
   modEntries: ModEntry[];
   onModEntriesChange: (modEntries: ModEntry[]) => void;
-  onExportCSV: () => void;
-  onCopyCSV?: () => void;
+  onExportCSV: (options: CsvExportOptions) => void;
+  onCopyCSV: (options: CsvExportOptions) => void;
   className?: string;
 }
 
@@ -24,6 +26,7 @@ export const EditableModTable: React.FC<EditableModTableProps> = ({
 }) => {
   const [editingCell, setEditingCell] = useState<EditingCell | null>(null);
   const [editValue, setEditValue] = useState("");
+  const [showCsvDialog, setShowCsvDialog] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -95,6 +98,30 @@ export const EditableModTable: React.FC<EditableModTableProps> = ({
     const updatedEntries = [...modEntries, newEntry];
     onModEntriesChange(updatedEntries);
   }, [modEntries, onModEntriesChange]);
+
+  const handleShowCsvDialog = useCallback(() => {
+    setShowCsvDialog(true);
+  }, []);
+
+  const handleCloseCsvDialog = useCallback(() => {
+    setShowCsvDialog(false);
+  }, []);
+
+  const handleExportCSV = useCallback(
+    (options: CsvExportOptions) => {
+      onExportCSV(options);
+      setShowCsvDialog(false);
+    },
+    [onExportCSV]
+  );
+
+  const handleCopyCSV = useCallback(
+    (options: CsvExportOptions) => {
+      onCopyCSV(options);
+      setShowCsvDialog(false);
+    },
+    [onCopyCSV]
+  );
 
   if (modEntries.length === 0) {
     return (
@@ -178,15 +205,18 @@ export const EditableModTable: React.FC<EditableModTableProps> = ({
         <button className="btn btn-primary" onClick={addNewEntry}>
           ➕ MODを追加
         </button>
-        <button className="btn btn-secondary" onClick={onExportCSV}>
-          📊 CSV Export
+        <button className="btn btn-secondary" onClick={handleShowCsvDialog}>
+          📊 CSVエクスポート
         </button>
-        {onCopyCSV && (
-          <button className="btn btn-secondary" onClick={onCopyCSV}>
-            📋 クリップボードにコピー
-          </button>
-        )}
       </div>
+
+      <CsvExportDialog
+        isOpen={showCsvDialog}
+        onClose={handleCloseCsvDialog}
+        onExport={handleExportCSV}
+        onCopy={handleCopyCSV}
+        itemCount={1}
+      />
     </div>
   );
 };

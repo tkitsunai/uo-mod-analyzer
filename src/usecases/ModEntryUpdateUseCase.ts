@@ -11,14 +11,7 @@ export interface ModEntryUpdateResult {
   error?: string;
 }
 
-/**
- * MOD エントリの更新処理を担当するユースケース
- * バリデーションとビジネスルールを適用
- */
 export class ModEntryUpdateUseCase {
-  /**
-   * MOD エントリリストを更新
-   */
   updateModEntry(
     entries: ModEntry[],
     index: number,
@@ -72,9 +65,6 @@ export class ModEntryUpdateUseCase {
     }
   }
 
-  /**
-   * MOD エントリを削除
-   */
   deleteModEntry(entries: ModEntry[], index: number): ModEntryUpdateResult {
     try {
       if (index < 0 || index >= entries.length) {
@@ -101,9 +91,6 @@ export class ModEntryUpdateUseCase {
     }
   }
 
-  /**
-   * 新しい MOD エントリを追加
-   */
   addModEntry(entries: ModEntry[], newEntry: ModEntry): ModEntryUpdateResult {
     try {
       if (!isValidModEntry(newEntry)) {
@@ -130,9 +117,6 @@ export class ModEntryUpdateUseCase {
     }
   }
 
-  /**
-   * MOD エントリリスト全体を検証
-   */
   validateModEntries(entries: ModEntry[]): ModEntryUpdateResult {
     try {
       const validEntries = entries.filter(isValidModEntry);

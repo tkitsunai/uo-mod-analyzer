@@ -7,7 +7,6 @@ interface HistoryPanelHeaderProps {
   onSort: (sortBy: "date" | "name" | "mods") => void;
   onClearAll: () => void;
   onExportCSV: () => void;
-  onCopyCSV?: () => void;
   className?: string;
 }
 
@@ -17,7 +16,6 @@ export const HistoryPanelHeader: React.FC<HistoryPanelHeaderProps> = ({
   onSort,
   onClearAll,
   onExportCSV,
-  onCopyCSV,
   className = "",
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -83,13 +81,8 @@ export const HistoryPanelHeader: React.FC<HistoryPanelHeaderProps> = ({
                 <div className="dropdown-overlay" onClick={() => setShowActions(false)} />
                 <div className="actions-dropdown">
                   <button onClick={onExportCSV} className="action-btn primary">
-                    📊 CSV Export
+                    📊 CSVエクスポート
                   </button>
-                  {onCopyCSV && (
-                    <button onClick={onCopyCSV} className="action-btn primary">
-                      📋 クリップボードにコピー
-                    </button>
-                  )}
                   <button onClick={onClearAll} className="action-btn danger">
                     🗑️ Clear All
                   </button>

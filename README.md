@@ -1,102 +1,106 @@
 # UO Mod Analyzer
 
-UO Mod Analyzer は、画像からテキストを抽出して MOD の情報を解析する Web アプリケーションです。OCR（光学文字認識）技術を使用して、ゲーム内のアイテムや MOD の詳細を読み取り、分析します。
+A web application that extracts and analyzes MOD information from Ultima Online item images using OCR (Optical Character Recognition) technology.
 
 ## 🌐 Live Demo
 
-[**UO Mod Analyzer**](https://tkitsunai.github.io/uo-mod-analyzer/) - GitHub Pages で公開中
+[**UO Mod Analyzer**](https://tkitsunai.github.io/uo-mod-analyzer/) - Deployed on GitHub Pages
 
-## ✨ 特徴
+## ✨ Features
 
-- 📸 **画像アップロード**: ゲーム内のスクリーンショットをアップロード
-- 🔍 **OCR 解析**: Tesseract.js を使用した高精度なテキスト認識
-- 📊 **MOD 情報抽出**: アイテムの詳細や MOD 情報を自動解析
-- 🎨 **レスポンシブデザイン**: モバイルとデスクトップの両方に対応
-- ⚡ **高速処理**: React による効率的な UI 更新
+- 📸 **Image Upload**: Upload game screenshots or paste from clipboard
+- 🔍 **OCR Analysis**: Extract text from images using Tesseract.js
+- 📊 **MOD Information Extraction**: Automatically parse UO item MODs
+- 📝 **Editable Results**: Modify extracted MOD data inline
+- 📋 **Item History**: Save and manage analyzed items
+- 📈 **CSV Export**: Export data to CSV files or clipboard
+- 🔎 **Search & Filter**: Find items by name or MOD properties
+- 📱 **Responsive Design**: Works on desktop, tablet, and mobile
 
-## 🛠️ 技術スタック
+## 🛠️ Tech Stack
 
-- **Frontend**: React 19 + TypeScript
-- **Build Tool**: Vite
-- **OCR Engine**: Tesseract.js
-- **Styling**: CSS3
-- **Deployment**: GitHub Pages
-- **CI/CD**: GitHub Actions
+- **React 19** + **TypeScript** - Modern frontend framework
+- **Vite** - Fast build tool and development server
+- **Tesseract.js** - OCR engine for text recognition
+- **Clean Architecture** - Maintainable code structure
+- **GitHub Pages** - Deployment platform
 
-## 🚀 開発環境のセットアップ
+## 🚀 Getting Started
 
-### 前提条件
+### Prerequisites
 
-- Node.js (v18 以上)
+- Node.js (v18 or higher)
 - pnpm
 
-### インストール
+### Installation
 
 ```bash
-# リポジトリをクローン
+# Clone the repository
 git clone https://github.com/tkitsunai/uo-mod-analyzer.git
 cd uo-mod-analyzer
 
-# 依存関係をインストール
+# Install dependencies
 pnpm install
 ```
 
-### 開発サーバーの起動
+### Development
 
 ```bash
+# Start development server
 pnpm dev
 ```
 
-開発サーバーが `http://localhost:5173` で起動します。
+The development server will start at `http://localhost:5173`.
 
-### ビルド
+### Build
 
 ```bash
+# Build for production
 pnpm build
-```
 
-### プレビュー
-
-```bash
+# Preview production build
 pnpm preview
 ```
 
-## 📁 プロジェクト構造
+## 📁 Project Structure
 
 ```
 uo-mod-analyzer/
-├── public/           # 静的ファイル
-├── src/              # ソースコード
-│   ├── App.tsx       # メインアプリケーション
-│   ├── main.tsx      # エントリーポイント
-│   └── assets/       # 画像・アイコン等
-├── .github/          # GitHub Actions ワークフロー
-└── dist/             # ビルド出力（自動生成）
+├── src/
+│   ├── components/          # UI components
+│   ├── hooks/              # Custom React hooks
+│   ├── domain/             # Business logic and entities
+│   ├── usecases/           # Application use cases
+│   └── infrastructure/     # External services and storage
+├── public/                 # Static assets
+└── .github/               # GitHub Actions and documentation
 ```
 
-## 🔧 使用方法
+## 🔧 Usage
 
-1. アプリケーションにアクセス
-2. 「画像を選択」ボタンをクリックして、MOD 情報が表示された画像をアップロード
-3. OCR 処理が自動的に実行され、テキストが抽出されます
-4. 抽出されたテキストから MOD 情報を確認
+1. **Upload Image**: Click "Select Image" or drag & drop an image
+2. **Analyze**: Click "Analyze" to start OCR processing
+3. **Review Results**: Check extracted MOD information
+4. **Edit if Needed**: Modify any incorrect data
+5. **Save to History**: Store the analyzed item
+6. **Export**: Download CSV or copy to clipboard
 
-## 🤝 コントリビューション
+## 🤝 Contributing
 
-プルリクエストや Issue の投稿を歓迎します！
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. このリポジトリをフォーク
-2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 📝 ライセンス
+## 📝 License
 
-このプロジェクトは MIT ライセンスの下で公開されています。
+This project is licensed under the MIT License.
 
-## 🔗 関連リンク
+## 🔗 Links
 
-- [Tesseract.js](https://tesseract.projectnaptha.com/) - OCR ライブラリ
-- [React](https://react.dev/) - UI ライブラリ
-- [Vite](https://vite.dev/) - ビルドツール
+- [Tesseract.js](https://tesseract.projectnaptha.com/) - OCR library
+- [React](https://react.dev/) - UI framework
+- [Vite](https://vite.dev/) - Build tool

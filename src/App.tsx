@@ -95,7 +95,12 @@ function App() {
 
     const name = itemName.trim() || `アイテム ${new Date().toLocaleString()}`;
     await addItem(name, editableModEntries, ocrText, 0, imagePreview || undefined);
+
     setItemName("");
+    resetOcrResults();
+    resetModEntries([]);
+
+    showMessage("📋 履歴に追加しました。新しい解析を開始できます。", "success", 3000);
   };
 
   return (
@@ -153,10 +158,16 @@ function App() {
               <EditableModTable
                 modEntries={editableModEntries}
                 onModEntriesChange={(entries) => resetModEntries(entries)}
-                onExportCSV={() => exportModEntries(editableModEntries)}
-                onCopyCSV={async () => {
+                onExportCSV={async (options) => {
                   try {
-                    await copyModEntries(editableModEntries);
+                    await exportModEntries(editableModEntries, itemName, options);
+                  } catch (error) {
+                    showMessage("❌ CSVエクスポートに失敗しました", "error", 3000);
+                  }
+                }}
+                onCopyCSV={async (options) => {
+                  try {
+                    await copyModEntries(editableModEntries, itemName, options);
                     showMessage("📋 CSVデータをクリップボードにコピーしました", "success", 3000);
                   } catch (error) {
                     showMessage("❌ クリップボードへのコピーに失敗しました", "error", 3000);
